@@ -7,6 +7,8 @@ public class Main {
         int age = 22;
         String cls = "PRO3";
 
+        String selectQuery = "SELECT * FROM student WHERE name = ?";
+
         try {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
             Connection con = DriverManager.getConnection("jdbc:derby:exampleDB;create=true");
@@ -25,7 +27,11 @@ public class Main {
                     "('" + name + "'," + age + ",'" + cls + "')");
             st.executeBatch();
 
-            ResultSet res = st.executeQuery("select * from student");
+            //ResultSet res = st.executeQuery("select * from student");
+            PreparedStatement ps = con.prepareCall(selectQuery);
+            ps.setString(1,"Jeremy");
+
+            ResultSet res = ps.executeQuery();
             while(res.next()){
                 System.out.print(res.getString("id")+" ");
                 System.out.print(res.getString("name")+" ");
